@@ -16,7 +16,7 @@ pipeline{
     stages{
         stage("executing local-dev pipeline"){
             when {
-                environment name: 'env', value: 'local-dev'
+                expression { env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'feature'}
             }
             steps{
                     build job: "local-dev-deploy", parameters: [
