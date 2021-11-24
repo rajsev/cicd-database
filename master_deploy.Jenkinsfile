@@ -8,11 +8,10 @@ pipeline{
     options{
         timestamps()
         buildDiscarder(logRotator(numToKeepStr: '15'))
-        ansiColor('xterm')
     }
-    environment {
-        env = ${ENVIRONMENT}
-    }
+    // environment {
+    //     env = "${ENVIRONMENT}"
+    // }
     stages{
         stage("executing local-dev pipeline"){
             when {

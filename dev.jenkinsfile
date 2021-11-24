@@ -1,20 +1,28 @@
 pipeline{
     agent{
         label "liquibase"
+        // docker { 
+        //     image 'liquibase/liquibase:4.4.2'
+        // }
     }
     stages{
         stage('pulling application code from git') {
             steps {
                 script {
                     dir("$WORKSPACE") {
-                        checkout scm: [$class: 'GitSCM', branches: [[name: "*/${APPLICATION_GIT_BRANCH}"]], extensions: [], userRemoteConfigs: [[credentialsId: '', url: ""]]]
+                        checkout scm: [$class: 'GitSCM', branches: [[name: "*/${APPLICATION_GIT_BRANCH}"]], extensions: [], userRemoteConfigs: [[credentialsId: 'rajsev', url: "https://github.com/rajsev/cicd-database.git"]]]
                     }      
                 } 
             }
         }
-        stage("dev deployment"){
+        stage("dev deployment status check"){
             steps{
-                echo "========executing A========"
+                steps{
+		            withCredentials([usernamePassword(credentialsId: '', passwordVariable: '', usernameVariable: '')]) {
+                    sh'''
+                      liquibase status --url="jdbc:postgres://192.168.32.11:3306/dev" --changeLogFile=my_app-wrapper.xml --username=$POSTGRESDB_CREDS_USR --password=$POSTGRESDB_CREDS_PSW'
+                    '''    
+
             }
             post{
                 always{
