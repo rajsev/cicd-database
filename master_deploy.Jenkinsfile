@@ -1,10 +1,5 @@
 pipeline{
-    agent{
-        label "node"
-    }
-    parameters{
-
-    }
+    agent any
     options{
         timestamps()
         buildDiscarder(logRotator(numToKeepStr: '15'))
