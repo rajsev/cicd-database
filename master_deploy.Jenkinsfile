@@ -13,13 +13,6 @@ pipeline{
                 } 
             }
         }
-        stage('pulling application code from git') {
-            steps {
-                script {
-                        checkout scm: [$class: 'GitSCM', branches: [[name: "*/${GIT_BRANCH}"]], extensions: [], userRemoteConfigs: [[credentialsId: 'rajsev', url: "https://github.com/rajsev/cicd-database.git"]]]    
-                } 
-            }
-        }
         stage("executing local-dev pipeline"){
             when {
                 expression { env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'feature'}
