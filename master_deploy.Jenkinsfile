@@ -1,12 +1,10 @@
+properties([pipelineTriggers([githubPush()])])
 pipeline{
     agent any
     options{
         timestamps()
         buildDiscarder(logRotator(numToKeepStr: '15'))
     }
-    // environment {
-    //     env = "${ENVIRONMENT}"
-    // }
     stages{
         stage('pulling application code from git') {
             steps {
@@ -15,27 +13,23 @@ pipeline{
                 } 
             }
         }
-
+        stage('pulling application code from git') {
+            steps {
+                script {
+                        checkout scm: [$class: 'GitSCM', branches: [[name: "*/${GIT_BRANCH}"]], extensions: [], userRemoteConfigs: [[credentialsId: 'rajsev', url: "https://github.com/rajsev/cicd-database.git"]]]    
+                } 
+            }
+        }
         stage("executing local-dev pipeline"){
             when {
-                expression { env.BRANCH_NAME == 'dev' || env.BRANCH_NAME == 'feature'}
+                expression { env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'feature'}
             }
             steps{
-                    build job: "local-dev-deploy", parameters: [
-                        string(name: 'branch', value: 'DEV')
-                    ],
-                    wait: true
-            }
-            post{
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========executing local-dev pipeline successfully========"
-                }
-                failure{
-                    echo "========executing local-dev pipeline failed========"
-                }
+                withCredentials([usernamePassword(credentialsId: '', passwordVariable: '', usernameVariable: '')]) {
+                    sh'''
+                      
+                      liquibase status --url="jdbc:postgres://192.168.32.11:3306/dev" --changeLogFile=my_app-wrapper.xml --username=$POSTGRESDB_CREDS_USR --password=$POSTGRESDB_CREDS_PSW'
+                    '''  
             }
         }
         stage("executing dev pipeline"){
@@ -48,17 +42,7 @@ pipeline{
                     ],
                     wait: true
             }
-            post{
-                always{
-                    echo "========always========"
-                }
-                success{
-                    echo "========executing local-dev pipeline successfully========"
-                }
-                failure{
-                    echo "========executing local-dev pipeline failed========"
-                }
-            }
+    
         }
     }
     post{
