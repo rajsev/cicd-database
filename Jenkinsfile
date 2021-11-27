@@ -18,7 +18,7 @@ pipeline{
             //     expression { env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'feature'}
             // }
             steps{
-                withCredentials([gitUsernamePassword(credentialsId: '', gitToolName: 'Default')]) {
+                withCredentials([gitUsernamePassword(credentialsId: 'rajsevugan', gitToolName: 'Default')]) {
                     script{
                      def externalMethod = load("file_list.groovy")
                     }
