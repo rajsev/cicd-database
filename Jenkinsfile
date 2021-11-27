@@ -19,9 +19,9 @@ pipeline{
             }
             steps{
                 withCredentials([usernamePassword(credentialsId: '', passwordVariable: '', usernameVariable: '')]) {
-                    
+                    script{
                      def externalMethod = load("file_list.groovy")
-                    
+                    }
                 }
             }
         }
