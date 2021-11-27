@@ -14,9 +14,9 @@ pipeline{
             }
         }
         stage("executing local-dev pipeline"){
-            when {
-                expression { env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'feature'}
-            }
+            // when {
+            //     expression { env.GIT_BRANCH == 'dev' || env.GIT_BRANCH == 'feature'}
+            // }
             steps{
                 withCredentials([usernamePassword(credentialsId: '', passwordVariable: '', usernameVariable: '')]) {
                     script{
