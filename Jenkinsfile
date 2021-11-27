@@ -23,6 +23,7 @@ pipeline{
                       git diff-tree --no-commit-id --name-only -r `git rev-parse --short HEAD`
                       liquibase status --url="jdbc:postgres://192.168.32.11:3306/dev" --changeLogFile=my_app-wrapper.xml --username=$POSTGRESDB_CREDS_USR --password=$POSTGRESDB_CREDS_PSW'
                     '''  
+                }
             }
         }
         stage("executing dev pipeline"){
@@ -37,6 +38,6 @@ pipeline{
             }
     
         }
-    }
+    
   }
 }
