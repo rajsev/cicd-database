@@ -24,7 +24,7 @@ for (String name : listdbItems) {
         execdbtables(name)
      }
 }
-sh "git checkout master"
+//sh "git checkout master"
 def execdbtables(name){
         d = readFile "${name}"
         print(d)
