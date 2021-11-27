@@ -20,7 +20,7 @@ pipeline{
                 steps{
 		            withCredentials([usernamePassword(credentialsId: '', passwordVariable: '', usernameVariable: '')]) {
                     sh'''
-                      liquibase status --url="jdbc:postgres://192.168.32.11:3306/dev" --changeLogFile=my_app-wrapper.xml --username=$POSTGRESDB_CREDS_USR --password=$POSTGRESDB_CREDS_PSW'
+                      def externalMethod = load("file1.groovy")
                     '''    
             }
             post{
