@@ -34,15 +34,10 @@ pipeline{
                         string(name: 'branch', value: 'DEV')
                     ],
                     wait: true
-            }
+                }
             }
     
         }
-      post { 
-        always { 
-            cleanWs()
-        }
-    }
     
   }
 
