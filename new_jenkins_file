@@ -1,0 +1,87 @@
+#!/usr/bin/env groovy
+
+import groovy.json.JsonSlurper
+
+pipeline {
+
+    agent none
+
+    stages {
+
+        stage('Get changes files.') {
+
+            agent { label 'docker' }
+
+            environment {
+
+                names = ""
+
+                }
+
+            steps {
+
+                script {
+
+                    def output = ""
+
+                    def app_base_url = ""
+
+                    names = sh(
+
+                                script: "git log -m -1 --name-only --first-parent --pretty='format:' \$(git rev-parse --short HEAD) | tr '\n' ' '",
+
+                                returnStdout: true,
+
+                            )
+
+                    print(names)
+
+
+
+                    listdbItems = names.tokenize(" ")
+
+                    for (String name : listdbItems) {
+
+                            if (name.startsWith("bifrost") && name.endsWith("changelog.sql")){
+
+                            print("Processing"+ name)
+
+                            execdbtables(name)
+
+                            }
+
+                            if (name.startsWith("dev") && name.endsWith("changelog.sql")){
+
+                            print("Processing"+ name)
+
+                            execdbtables(name)
+
+                            }
+
+                    }
+
+
+                    sh "git checkout master"
+
+                    sh "git push origin master:release/v1"
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+
+
+def execdbtables(name){
+
+        d = readFile "${name}"
+
+        print(d)
+
+
+}
