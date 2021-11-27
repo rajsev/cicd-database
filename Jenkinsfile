@@ -6,13 +6,6 @@ pipeline{
         buildDiscarder(logRotator(numToKeepStr: '15'))
     }
     stages{
-        stage('pulling cicd code from git') {
-            steps {
-                script {
-                        checkout(scm: [$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'rajsev', url: "https://github.com/rajsev/cicd-database.git"]]])   
-                } 
-            }
-        }
         stage('pulling application code from git') {
             steps {
                 script {
