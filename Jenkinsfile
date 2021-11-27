@@ -36,13 +36,13 @@ pipeline{
                     wait: true
             }
             }
-     post { 
+    
+        }
+      post { 
         always { 
             cleanWs()
         }
     }
-    
-   }
     
   }
 
