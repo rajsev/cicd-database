@@ -8,7 +8,24 @@ names = sh(
 
  )
 print(names)
+new FileWriter("file_list.txt", true).with {
+        write(names)
+        flush()
+}
+listdbItems = names.tokenize(" ")
+for (String name : listdbItems) {
+    if (name.startsWith("bifrost") && name.endsWith("changelog.sql")){
+    print("Processing"+ name)
+    execdbtables(name)
+    }
 
+    if (name.startsWith("dev") && name.endsWith("changelog.sql")){
+        print("Processing"+ name)
+        execdbtables(name)
+     }
+}
 sh "git checkout master"
-
-                    
+def execdbtables(name){
+        d = readFile "${name}"
+        print(d)
+}
